@@ -1,0 +1,26 @@
+# 部署前先修改 Caddyfile 完成自定义设置，再启动容器
+
+# 直连
+vless-ws.example.com {
+  encode gzip
+
+  reverse_proxy /ChangeMe localhost:55555  # 转发至 Xray
+
+  reverse_proxy localhost:8080  # 反向代理本机 8080 端口
+}
+
+# CloudFlare CDN
+http://cdn.example.com {
+  encode gzip
+
+  reverse_proxy /ChangeMe localhost:55555
+
+  reverse_proxy https://http.cat/404   # 伪装为指定网页
+}
+
+# X-UI
+http://xui.example.com {
+  encode gzip
+
+  reverse_proxy localhost:54321  # X-UI 面板
+}

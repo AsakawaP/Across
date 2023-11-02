@@ -1,0 +1,25 @@
+services:
+  # Caddy + X-UI 容器网络模式设置为 host，从而允许通过修改配置的方式使用任意端口，无须修改容器
+
+  caddy:
+    image: "docker.io/library/caddy:latest"
+    container_name: caddy
+    restart: always
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+      # - ./site:/srv   # 静态网页文件,如有
+    network_mode: host
+
+  xui:
+    # 选择喜欢的镜像
+    image: "docker.io/enwaiax/x-ui:latest"    # vaxilu/x-ui
+    # image: "docker.io/enwaiax/x-ui:alpha-zh"  # FranzKafkaYu/x-ui
+    # image: "docker.io/enwaiax/x-ui:beta"      # X-UI-Unofficial/x-ui
+    container_name: xui
+    restart: always
+    volumes:
+      - ./xui_data:/etc/x-ui/
+      # - ./xui_ssl:/root/cert/   # TLS 证书，用于 HTTPS 直接访问 X-UI
+    network_mode: host
